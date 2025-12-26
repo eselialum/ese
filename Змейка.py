@@ -101,7 +101,7 @@ class Snake(GameObject):
     def update_direction(self):
         """Обновляет направление движения змейки."""
         if self.next_direction:
-            # Проверяем, что змейка не пытается двигаться в обратном направлении
+            # Проверяем, что змейка непытается двигаться в обратном направлении
             opposite_directions = {
                 UP: DOWN,
                 DOWN: UP,
@@ -219,7 +219,7 @@ def main():
 
         # Отображение счета
         font = pygame.font.Font(None, 36)
-        score_text = font.render(f"Счет: {snake.length - 1}", True, (255, 255, 255))
+        score_text = font.render(f"Счет:{snake.length-1}",True, (255, 255, 255))
         screen.blit(score_text, (10, 10))
 
         # Обновление экрана
@@ -231,4 +231,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
