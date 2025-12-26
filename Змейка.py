@@ -11,7 +11,7 @@ SCREEN_HEIGHT = 480
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
 GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
-FPS = 20
+FPS = 10
 
 # Цвета
 BACKGROUND_COLOR = (0, 0, 0)
@@ -36,7 +36,9 @@ class GameObject:
             position: позиция объекта на игровом поле (по умолчанию центр)
             body_color: цвет объекта (RGB кортеж)
         """
-        self.position = position if position else (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        if position is None:
+            position = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        self.position = position
         self.body_color = body_color
 
     def draw(self, surface):
@@ -223,9 +225,10 @@ def main():
         # Обновление экрана
         pygame.display.update()
 
-        # Ограничение FPS
+        # Ограничение FPS (здесь управляется скорость игры)
         clock.tick(FPS)
 
 
 if __name__ == "__main__":
     main()
+    
