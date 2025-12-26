@@ -61,7 +61,6 @@ class Apple(GameObject):
 
     def randomize_position(self):
         """Устанавливает случайное положение яблока на игровом поле."""
-        # Генерируем случайные координаты в пределах игрового поля
         x = random.randint(0, GRID_WIDTH - 1) * GRID_SIZE
         y = random.randint(0, GRID_HEIGHT - 1) * GRID_SIZE
         self.position = (x, y)
@@ -90,7 +89,7 @@ class Snake(GameObject):
         """Инициализация змейки."""
         super().__init__(body_color=SNAKE_COLOR)
         self.length = 1
-        self.positions = [self.position]  # Список позиций сегментов
+        self.positions = [self.position]
         self.direction = RIGHT
         self.next_direction = None
 
@@ -101,7 +100,6 @@ class Snake(GameObject):
     def update_direction(self):
         """Обновляет направление движения змейки."""
         if self.next_direction:
-            # Проверяем, что змейка непытается двигаться в обратном направлении
             opposite_directions = {
                 UP: DOWN,
                 DOWN: UP,
@@ -117,15 +115,12 @@ class Snake(GameObject):
         head_x, head_y = self.get_head_position()
         dir_x, dir_y = self.direction
 
-        # Вычисляем новую позицию головы с учетом прохождения через границы
         new_x = (head_x + dir_x * GRID_SIZE) % SCREEN_WIDTH
         new_y = (head_y + dir_y * GRID_SIZE) % SCREEN_HEIGHT
         new_head = (new_x, new_y)
 
-        # Вставляем новую голову в начало списка
         self.positions.insert(0, new_head)
 
-        # Если длина змейки не увеличилась, удаляем хвост
         if len(self.positions) > self.length:
             self.positions.pop()
 
@@ -178,54 +173,38 @@ def handle_keys(snake):
 
 def main():
     """Основная функция игры."""
-    # Инициализация экрана
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Изгиб Питона")
     clock = pygame.time.Clock()
 
-    # Создание игровых объектов
     snake = Snake()
     apple = Apple()
 
-    # Основной игровой цикл
     while True:
-        # Обработка событий
         handle_keys(snake)
-
-        # Обновление направления змейки
         snake.update_direction()
-
-        # Движение змейки
         snake.move()
 
-        # Проверка, съела ли змейка яблоко
         if snake.get_head_position() == apple.position:
             snake.length += 1
             apple.randomize_position()
 
-            # Проверяем, что яблоко не появилось на змейке
             while apple.position in snake.positions:
                 apple.randomize_position()
 
-        # Проверка столкновения змейки с собой
         if snake.get_head_position() in snake.positions[1:]:
             snake.reset()
             apple.randomize_position()
 
-        # Отрисовка
         screen.fill(BACKGROUND_COLOR)
         snake.draw(screen)
         apple.draw(screen)
 
-        # Отображение счета
         font = pygame.font.Font(None, 36)
-        score_text = font.render(f"Счет:{snake.length-1}",True, (255, 255, 255))
+        score_text = font.render(f"Счет: {snake.length - 1}", True, (255, 255, 255))
         screen.blit(score_text, (10, 10))
 
-        # Обновление экрана
         pygame.display.update()
-
-        # Ограничение FPS (здесь управляется скорость игры)
         clock.tick(FPS)
 
 
